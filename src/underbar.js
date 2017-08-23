@@ -210,16 +210,25 @@
   //   }); // should be 5, regardless of the iterator function passed in
   //          No accumulator is given so the first element is used.
   _.reduce = function(collection, iterator, accumulator) {
+    
     if (accumulator !== undefined) {
       var acc = accumulator;
-    } else {
+    } else if (Array.isArray(collection)) {
       var acc = collection[0];
+    } else {
+      var acc = Object.keys(collection)[0];
     }
 
     _.each(collection, function(item, index, collection) {
       // run if index is not 0 or accmulator is defined
-      if (index !== 0 || accumulator !== undefined) {
-        acc = iterator(acc, item);
+      if (Array.isArray(collection)) {
+        if (index !== 0 || accumulator !== undefined) {
+          acc = iterator(acc, item);
+        }
+      } else {
+        if (index !== Object.keys(collection)[0] || accumulator !== undefined) {
+          acc = iterator(acc, item);
+        }
       }
     }); 
        
